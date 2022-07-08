@@ -34,9 +34,13 @@ def main():
     # creo la ventana raíz
     MainWW = TKu.Window(GUI_TITLE, WIDTH, HEIGHT, GUI_BK)
 
-    MainWW.CreateList(WW_DIM, 0.25, 0.25, ["x", "y", "z"], [[1, 2, 3], [4, 5, 6]])
+    columns = list(range(30))
+    items = [ list(range(i, i + 30)) for i in range(50)]
+
+    MainWW.CreateList(WW_DIM, 0, 0, 0.5, 0.5, columns, items)
 
     MainWW.MainLoop()
+
 
 main()
 
