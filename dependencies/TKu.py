@@ -18,6 +18,8 @@ class Window:
         self.ww = Tk()
         self.frame = Frame(self.ww)
 
+        # self.ww.resizable(False, False)
+
         self.ww.title(title)
         self.ww.configure(width = p_width, height = p_height, bg = bgc)
 
@@ -27,20 +29,37 @@ class Window:
         self.ww.mainloop()
 
     # función para crear un botón
-    def CreateButton(self, WWdim, relx, rely, text, command, bgc = "lightgray"):
+    def CreateButton(self, WWdim, relx, rely, text, command, bgc = "lightgray", frame = None):
+
+        if frame == None:
+
+            Wframe = self.frame
+        else:
+            Wframe = frame
 
         # se crea una instancia del objeto button
         TB = Button(
-            self.ww, text = text, command = command, bg = bgc, bd = GBD
+            Wframe, text = text, command = command, bg = bgc, bd = GBD
         )
 
         # se pocisiona el objeto
-        TB.place(x = int(WWdim[0] * relx), y = int(WWdim[1] * rely))    
+        TB.place(relx = relx, rely = rely)    
 
     # función para crear una lista de datos
-    def CreateList(self, WWdim, relx, rely, rwidth, rheight, columns, data):
+    def CreateList(self, WWdim, relx, rely, rwidth, rheight, columns, data, frame = None):
 
-        TV = Treeview(self.ww, columns = columns[1::])
+        if frame ==None:
+
+            Wframe = self.frame
+        else:
+            Wframe = frame
+
+        TVFrame = Frame(self.ww)
+        # TVFrame.pack(side = BOTTOM, pady = 20, padx = 20, fill = X)
+
+        TVFrame.place(relwidth = rwidth, relheight = rheight, relx = relx, rely = rely)
+
+        TV = Treeview(TVFrame, columns = columns[1::])
 
         TV.heading("#0", text = columns[0])
 
@@ -62,8 +81,8 @@ class Window:
         
         TV.column("#0", stretch = NO, anchor = CENTER)
 
-        SBy = Scrollbar(self.ww, orient = "vertical", command = TV.yview)
-        SBx = Scrollbar(self.ww, orient = "horizontal")
+        SBy = Scrollbar(TVFrame, orient = "vertical", command = TV.yview)
+        SBx = Scrollbar(TVFrame, orient = "horizontal")
         SBx.configure(command = TV.xview)
 
         TV.configure(yscroll = SBy.set)
@@ -72,33 +91,50 @@ class Window:
         SBy.pack(side = RIGHT, fill = BOTH)
         SBx.pack(side = BOTTOM, fill = BOTH)
 
-        TV.place(relx = relx, rely = rely)
+        TV.pack(side = LEFT, fill = BOTH)
 
         return TV
     
     # función para display de mensajes en la ventana
-    def CreateLabel(self, WWdim, relx, rely, text):
+    def CreateLabel(self, WWdim, relx, rely, text, frame = None):
 
-        LB = Label(self.ww, text = text, bd = GBD)
+        if frame == None:
 
-        LB.place(x = int(WWdim[0] * relx), y = int(WWdim[1] * rely))
+            Wframe = self.frame
+        else:
+            Wframe = frame
+
+        LB = Label(Wframe, text = text, bd = GBD)
+
+        LB.place(relx = relx, rely = rely)
 
     # función para crear espacios de texto
-    def CreateEntry(self, WWdim, relx, rely, width, height):
+    def CreateEntry(self, WWdim, relx, rely, width, height, frame = None):
 
-        ET = Entry(self.ww)
+        if frame == None:
+
+            Wframe = self.frame
+        else:
+            Wframe = frame
+
+        ET = Entry(Wframe)
         ET.config(width = width, height = height)
 
-        ET.place(x = int(WWdim[0] * relx), y = int(WWdim[1] * rely))
+        ET.place(relx = relx, rely = rely)
 
         return ET
 
     # función que crea check buttons
-    def CreateCheckbutton(self, WWdim, relx, rely, variable):
+    def CreateCheckbutton(self, WWdim, relx, rely, variable, frame = None):
 
-        CB = Checkbutton(self.ww, variable = variable)
+        if frame == None:
+            Wframe = self.frame
+        else:
+            Wframe = frame
 
-        CB.place(x = int(WWdim[0] * relx), y = int(WWdim[1] * rely))
+        CB = Checkbutton(Wframe, variable = variable)
+
+        CB.place(relx = relx, rely = rely)
     
     # función que crea menús en la barra superior de la ventana
     def CreateMenu(self):
@@ -129,11 +165,17 @@ class Window:
 
 
     # función para crear una lista desplegable
-    def CreateCombobox(self, WWdim, relx, rely, values):
+    def CreateCombobox(self, WWdim, relx, rely, values, frame = None):
+
+        if frame == None:
+
+            Wframe = self.frame
+        else:
+            Wframe = frame
 
         CB = Combobox(self.ww, state = "readonly", values = values)
 
-        CB.place(x = int(WWdim[0] * relx), y = int(WWdim[1] * rely))
+        CB.place(relx = relx, rely = rely)
 
         return CB
 
