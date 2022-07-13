@@ -2,11 +2,15 @@
 # - # SCRIPT CON FUNCIONES DE LA GUI  # - #
 # --------------------------------------- #
 
+from cgitb import text
 from tkinter import *
 from tkinter.ttk import Treeview, Combobox
 from turtle import width
 
 from numpy import var
+
+import TKgeneral as TKg
+from main import *
 
 GBD = 2
 
@@ -146,9 +150,11 @@ class Window:
         return MN 
     
     # función para crear las cascadas de los menús
-    def CreateSubmenu(self, Mmenu, items, commands):
+    def CreateSubmenu(self, Mmenu, items, commands, text):
 
         SBM = Menu(Mmenu, tearoff = 0)
+
+        SBM.configure(text = text)
 
         for (item, command) in zip(items, commands):
 
@@ -187,6 +193,16 @@ class Window:
         print("ACCIONADO")
 
         return
+    
+
+# función para crear el manú de la ventana principal
+def create_main_menu(window, menu):
+
+        MMenu = window.CreateMenu()
+
+        archivo_items = ["cambiar base de datos"]
+        archivo_commands = []
+        archivo_sub = window.CreateSubmenu(menu, archivo_items, archivo_commands)
 
 
 
