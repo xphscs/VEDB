@@ -9,8 +9,7 @@ from turtle import width
 
 from numpy import var
 
-import TKgeneral as TKg
-from main import *
+import dependencies.TKgeneral as TKg
 
 GBD = 2
 
@@ -150,11 +149,9 @@ class Window:
         return MN 
     
     # función para crear las cascadas de los menús
-    def CreateSubmenu(self, Mmenu, items, commands, text):
+    def CreateSubmenu(self, Mmenu, items, commands):
 
         SBM = Menu(Mmenu, tearoff = 0)
-
-        SBM.configure(text = text)
 
         for (item, command) in zip(items, commands):
 
@@ -196,13 +193,23 @@ class Window:
     
 
 # función para crear el manú de la ventana principal
-def create_main_menu(window, menu):
+def create_main_menu(window):
 
         MMenu = window.CreateMenu()
 
-        archivo_items = ["cambiar base de datos"]
-        archivo_commands = []
-        archivo_sub = window.CreateSubmenu(menu, archivo_items, archivo_commands)
+        SMitems = ["archivo", "pichingo"]
+
+        archivo_items = ["cambiar base de datos", "borrar base de datos"]
+        archivo_commands = [window.FuncionPrueba, window.FuncionPrueba]
+        archivo_sub = window.CreateSubmenu(MMenu, archivo_items, archivo_commands)
+
+        pichingo_items = ["pichingo 1", "pichingo 2", "pichingo 3"]
+        pichingo_commands = [window.FuncionPrueba,window.FuncionPrueba, window.FuncionPrueba]
+        pichingo_sub = window.CreateSubmenu(MMenu, pichingo_items, pichingo_commands)
+
+        window.MenuIntegrator(MMenu, SMitems, [archivo_sub, pichingo_sub])
+
+
 
 
 
