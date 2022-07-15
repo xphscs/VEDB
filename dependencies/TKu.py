@@ -52,37 +52,36 @@ class Window:
     def CreateList(self, WWdim, relx, rely, rwidth, rheight, columns, data, frame = None):
 
         if frame ==None:
-
             Wframe = self.frame
         else:
             Wframe = frame
 
         TVFrame = Frame(self.ww)
-        # TVFrame.pack(side = BOTTOM, pady = 20, padx = 20, fill = X)
-
         TVFrame.place(relwidth = rwidth, relheight = rheight, relx = relx, rely = rely)
 
-        TV = Treeview(TVFrame, columns = columns[1::])
+        TV = Treeview(TVFrame, columns = [f"#{i}" for i in range(columns.size)], show = "headings")
 
-        TV.heading("#0", text = columns[0])
+        # TV.heading("#1", text = columns[0])
+        for (i, item) in enumerate([columns[0]] + columns.tolist()):
 
-        for (i, item) in enumerate(columns[1::]):
-
-            TV.heading(item, text = item)
-            TV.column(f"#{i + 1}", anchor = CENTER, stretch = NO)
+            TV.heading(f"#{i}", text = item)
+            TV.column(f"#{i}", anchor = CENTER, stretch = NO)
         
 
         # se inserta la data que se tiene
         for item in data:
+
+            item = item.tolist()
             
             TV.insert(
                 "",
                 END,
+                iid = None,
                 text = item[0],
-                values = item[1::]
+                values = item[1::],
             )
         
-        TV.column("#0", stretch = NO, anchor = CENTER)
+        # TV.column("#0", stretch = NO, anchor = CENTER)
 
         SBy = Scrollbar(TVFrame, orient = "vertical", command = TV.yview)
         SBx = Scrollbar(TVFrame, orient = "horizontal")
@@ -195,19 +194,20 @@ class Window:
 # función para crear el manú de la ventana principal
 def create_main_menu(window):
 
-        MMenu = window.CreateMenu()
+    MMenu = window.CreateMenu()
 
-        SMitems = ["archivo", "pichingo"]
+    SMitems = ["archivo", "pichingo"]
 
-        archivo_items = ["cambiar base de datos", "borrar base de datos"]
-        archivo_commands = [window.FuncionPrueba, window.FuncionPrueba]
-        archivo_sub = window.CreateSubmenu(MMenu, archivo_items, archivo_commands)
+    archivo_items = ["cambiar base de datos", "borrar base de datos"]
+    archivo_commands = [window.FuncionPrueba, window.FuncionPrueba]
+    archivo_sub = window.CreateSubmenu(MMenu, archivo_items, archivo_commands)
 
-        pichingo_items = ["pichingo 1", "pichingo 2", "pichingo 3"]
-        pichingo_commands = [window.FuncionPrueba,window.FuncionPrueba, window.FuncionPrueba]
-        pichingo_sub = window.CreateSubmenu(MMenu, pichingo_items, pichingo_commands)
+    pichingo_items = ["pichingo 1", "pichingo 2", "pichingo 3"]
+    pichingo_commands = [window.FuncionPrueba,window.FuncionPrueba, window.FuncionPrueba]
+    pichingo_sub = window.CreateSubmenu(MMenu, pichingo_items, pichingo_commands)
 
-        window.MenuIntegrator(MMenu, SMitems, [archivo_sub, pichingo_sub])
+    window.MenuIntegrator(MMenu, SMitems, [archivo_sub, pichingo_sub])
+
 
 
 
