@@ -31,6 +31,13 @@ class Window:
 
         self.ww.mainloop()
 
+    def CreateFrame(self, relx, rely, relwidth, relheight):
+
+        frame = Frame(self.ww)
+        frame.place(relx = relx, rely = rely, relwidth = relwidth, relheight = relheight)
+
+        return frame
+
     # función para crear un botón
     def CreateButton(self, WWdim, relx, rely, text, command, bgc = "lightgray", frame = None):
 
@@ -127,16 +134,18 @@ class Window:
         return ET
 
     # función que crea check buttons
-    def CreateCheckbutton(self, WWdim, relx, rely, variable, frame = None):
+    def CreateCheckbutton(self, WWdim, relx, rely, variable, text,frame = None):
 
         if frame == None:
             Wframe = self.frame
         else:
             Wframe = frame
 
-        CB = Checkbutton(Wframe, variable = variable)
+        CB = Checkbutton(Wframe, variable = variable, text = text)
 
         CB.place(relx = relx, rely = rely)
+
+        return CB
     
     # función que crea menús en la barra superior de la ventana
     def CreateMenu(self):
@@ -189,25 +198,6 @@ class Window:
         print("ACCIONADO")
 
         return
-    
-
-# función para crear el manú de la ventana principal
-def create_main_menu(window):
-
-    MMenu = window.CreateMenu()
-
-    SMitems = ["archivo", "pichingo"]
-
-    archivo_items = ["cambiar base de datos", "borrar base de datos"]
-    archivo_commands = [window.FuncionPrueba, window.FuncionPrueba]
-    archivo_sub = window.CreateSubmenu(MMenu, archivo_items, archivo_commands)
-
-    pichingo_items = ["pichingo 1", "pichingo 2", "pichingo 3"]
-    pichingo_commands = [window.FuncionPrueba,window.FuncionPrueba, window.FuncionPrueba]
-    pichingo_sub = window.CreateSubmenu(MMenu, pichingo_items, pichingo_commands)
-
-    window.MenuIntegrator(MMenu, SMitems, [archivo_sub, pichingo_sub])
-
 
 
 
