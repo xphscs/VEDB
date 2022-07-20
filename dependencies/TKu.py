@@ -5,19 +5,82 @@
 from cgitb import text
 from tkinter import *
 from tkinter.ttk import Treeview, Combobox
-from turtle import width
 
 from numpy import var
 
 import dependencies.TKgeneral as TKg
+import dependencies.SQLu as DBu
 
 GBD = 2
 
+
+# Clase que guarda una lista de TK y hace operaciones con ella
 class TKList:
 
-    # Función de inicialiación
-    def __init_(self, root):
-        return
+    # Función de inicialiación, sólo crea las variables locales, no renderiza la lista
+    def __init__(self, root, data, posargs, dimargs):
+        
+        self.data_backup = data     # backup de la data en caso que no se quieran guardar cambios
+        self.data = data.copy()     # data a utilizat y modificar
+        self.show_data = data.copy() # data que aparecerá en pantalla luego de filtros}
+
+        self.root = root
+        self.frame = Frame(self.root)
+        self.frame.place(relwidth = dimargs[0], relheight = dimargs[1], relx = posargs[0], rely = posargs[1])
+
+        self.wwlist = self.CreateList()
+
+
+    # Función que crea la lista para mostrar en la GUI
+    def CreateList(self):
+
+        columns, items = DBu.df_to_data(self.data)
+
+        TV = Treeview(self.frame, columns = [f"#{i}" for i in range(columns.size)], show = "headings")
+
+        # TV.heading("#1", text = columns[0])
+        for (i, item) in enumerate([columns[0]] + columns.tolist()):
+            
+            TV.heading(f"#{i}", text = item)
+            TV.column(f"#{i}", anchor = CENTER, stretch = NO)
+        
+
+        # se inserta la data que se tiene
+        for item in items:
+
+            item = item.tolist()
+            
+            TV.insert(
+                "",
+                END,
+                iid = None,
+                # text = item[0],
+                values = item,
+            )
+        
+        # TV.column("#0", stretch = NO, anchor = CENTER)
+
+        SBy = Scrollbar(self.frame, orient = "vertical", command = TV.yview)
+        SBx = Scrollbar(self.frame, orient = "horizontal")
+        SBx.configure(command = TV.xview)
+
+        TV.configure(yscroll = SBy.set)
+        TV.configure(xscrollcommand = SBx.set)
+
+        SBy.pack(side = RIGHT, fill = BOTH)
+        SBx.pack(side = BOTTOM, fill = BOTH)
+
+        TV.pack(side = LEFT, fill = BOTH)
+
+        return TV
+
+
+
+
+
+
+
+    
 
 class Window:
 
@@ -61,54 +124,13 @@ class Window:
         # se pocisiona el objeto
         TB.place(relx = relx, rely = rely)    
 
-    # función para crear una lista de datos
-    def CreateList(self, WWdim, relx, rely, rwidth, rheight, columns, data, frame = None):
+    
 
-        if frame ==None:
-            Wframe = self.frame
-        else:
-            Wframe = frame
+    def CreateList(self, data, relx, rely, relwidth, relheight):
 
-        TVFrame = Frame(self.ww)
-        TVFrame.place(relwidth = rwidth, relheight = rheight, relx = relx, rely = rely)
+        TVlist = TKList(self.ww, data, (relx, rely), (relwidth, relheight))
 
-        TV = Treeview(TVFrame, columns = [f"#{i}" for i in range(columns.size)], show = "headings")
-
-        # TV.heading("#1", text = columns[0])
-        for (i, item) in enumerate([columns[0]] + columns.tolist()):
-
-            TV.heading(f"#{i}", text = item)
-            TV.column(f"#{i}", anchor = CENTER, stretch = NO)
-        
-
-        # se inserta la data que se tiene
-        for item in data:
-
-            item = item.tolist()
-            
-            TV.insert(
-                "",
-                END,
-                iid = None,
-                text = item[0],
-                values = item[1::],
-            )
-        
-        # TV.column("#0", stretch = NO, anchor = CENTER)
-
-        SBy = Scrollbar(TVFrame, orient = "vertical", command = TV.yview)
-        SBx = Scrollbar(TVFrame, orient = "horizontal")
-        SBx.configure(command = TV.xview)
-
-        TV.configure(yscroll = SBy.set)
-        TV.configure(xscrollcommand = SBx.set)
-
-        SBy.pack(side = RIGHT, fill = BOTH)
-        SBx.pack(side = BOTTOM, fill = BOTH)
-
-        TV.pack(side = LEFT, fill = BOTH)
-
-        return TV
+        return TVlist
     
     # función para display de mensajes en la ventana
     def CreateLabel(self, WWdim, relx, rely, text, frame = None):
@@ -208,4 +230,56 @@ class Window:
 
 
 
+"""
+FUNCIONES QUE FUNCIONABAN PERO QUE MODIFIQUÉ POR ESTÉTICA
 
+# función para crear una lista de datos
+    def CreateList1(self, WWdim, relx, rely, rwidth, rheight, columns, data, frame = None):
+
+        if frame ==None:
+            Wframe = self.frame
+        else:
+            Wframe = frame
+
+        TVFrame = Frame(self.ww)
+        TVFrame.place(relwidth = rwidth, relheight = rheight, relx = relx, rely = rely)
+
+        TV = Treeview(TVFrame, columns = [f"#{i}" for i in range(columns.size)], show = "headings")
+
+        # TV.heading("#1", text = columns[0])
+        for (i, item) in enumerate([columns[0]] + columns.tolist()):
+
+            TV.heading(f"#{i}", text = item)
+            TV.column(f"#{i}", anchor = CENTER, stretch = NO)
+        
+
+        # se inserta la data que se tiene
+        for item in data:
+
+            item = item.tolist()
+            
+            TV.insert(
+                "",
+                END,
+                iid = None,
+                text = item[0],
+                values = item[1::],
+            )
+        
+        # TV.column("#0", stretch = NO, anchor = CENTER)
+
+        SBy = Scrollbar(TVFrame, orient = "vertical", command = TV.yview)
+        SBx = Scrollbar(TVFrame, orient = "horizontal")
+        SBx.configure(command = TV.xview)
+
+        TV.configure(yscroll = SBy.set)
+        TV.configure(xscrollcommand = SBx.set)
+
+        SBy.pack(side = RIGHT, fill = BOTH)
+        SBx.pack(side = BOTTOM, fill = BOTH)
+
+        TV.pack(side = LEFT, fill = BOTH)
+
+        return TV
+        
+"""
