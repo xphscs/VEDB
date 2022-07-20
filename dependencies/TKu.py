@@ -3,6 +3,7 @@
 # --------------------------------------- #
 
 from cgitb import text
+from logging import raiseExceptions
 from tkinter import *
 from tkinter.ttk import Treeview, Combobox
 
@@ -22,11 +23,12 @@ class TKList:
         
         self.data_backup = data     # backup de la data en caso que no se quieran guardar cambios
         self.data = data.copy()     # data a utilizat y modificar
-        self.show_data = data.copy() # data que aparecerá en pantalla luego de filtros}
 
         self.root = root
         self.frame = Frame(self.root)
         self.frame.place(relwidth = dimargs[0], relheight = dimargs[1], relx = posargs[0], rely = posargs[1])
+
+        self.columnvector = [BooleanVar(value = True) for x in data.columns]
 
         self.wwlist = self.CreateList()
 
@@ -42,7 +44,7 @@ class TKList:
         for (i, item) in enumerate([columns[0]] + columns.tolist()):
             
             TV.heading(f"#{i}", text = item)
-            TV.column(f"#{i}", anchor = CENTER, stretch = NO)
+            TV.column(f"#{i}", anchor = CENTER, stretch = NO, width = 150)
         
 
         # se inserta la data que se tiene
@@ -74,9 +76,36 @@ class TKList:
 
         return TV
 
+    # función para ocultar columnas 
+    def FilterColumns(self):
 
+        self.show_data = self.data.copy()
 
+        for i, val in enumerate(self.columnvector):
 
+            if not val.get():
+                self.wwlist.column(f"#{i + 1}", width = 0)
+                #self.show_data.drop(self.show_data.columns[[i]], axis = "columns")
+            else:
+                self.wwlist.column(f"#{i + 1}", width = 150)
+
+        self.CreateList()
+
+    def ColVecEdit(self, option):
+
+        if option == "all":
+
+            for val in self.columnvector:
+
+                val.set(True)
+        
+        elif option == "none":
+
+            for val in self.columnvector:
+
+                val.set(False)
+        
+        
 
 
 
@@ -108,7 +137,7 @@ class Window:
         return frame
 
     # función para crear un botón
-    def CreateButton(self, WWdim, relx, rely, text, command, bgc = "lightgray", frame = None):
+    def CreateButton(self, WWdim, relx, rely, text, command, bgc = "lightgray", frame = None, width = 0.2, height = 0.08):
 
         if frame == None:
 
@@ -122,7 +151,7 @@ class Window:
         )
 
         # se pocisiona el objeto
-        TB.place(relx = relx, rely = rely)    
+        TB.place(relx = relx, rely = rely, relwidth = width, relheight = height)
 
     
 

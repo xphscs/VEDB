@@ -44,33 +44,26 @@ def main():
     # Crear el menú de la ventana principal
     TKg.create_main_menu(MainWW)
 
-    # Creaceión de variables necesarias para el filtro de las listas
-    ShowVector = list()     # Vector que detecta cuáles columnas mostrar
-
     columns, items = DBu.df_to_data(DATA)
-
-    for colum in columns:
-        ShowVector.append(TKu.BooleanVar(value = True))
-        
-    # Creación principal de lista
-
-    MainList = MainWW.CreateList(DATA, 0.0, 0.5, 0.75, 0.5)
-
 
     # -- # MENÜ PRINCIPAL DE LA LISTA # -- #
 
+    # Creación principal de lista
+    MainList = MainWW.CreateList(DATA, 0.0, 0.5, 0.75, 0.5)
 
     ListMenuFrame = MainWW.CreateFrame(0.75, 0.5, 0.25, 0.5)     # frame del espacio a trabajar
 
     # Creación del menú de mostrado de columnas
 
-    MainWW.CreateLabel(WW_DIM, 0.35, 0.1, "MOSTRAR COLUMNAS", frame = ListMenuFrame)
+    MainWW.CreateLabel(WW_DIM, 0.25, 0.05, "MOSTRAR COLUMNAS", frame = ListMenuFrame)
     
     for i, colum in enumerate(columns):
-        MainWW.CreateCheckbutton(WW_DIM, (0.33  * ( i % 3 ) ), (0.08 * (i // 3)) + 0.2, ShowVector[i], colum, frame = ListMenuFrame)
+        MainWW.CreateCheckbutton(WW_DIM, (0.33  * ( i % 3 ) ), (0.08 * (i // 3)) + 0.2, MainList.columnvector[i], colum, frame = ListMenuFrame)
     
 
-    MainWW.CreateButton(WW_DIM, 0.45, 0.85, "Actualizar", command = lambda: TKg.ShowColumns(MainList, DATA, DATA_SHOW, ShowVector), frame = ListMenuFrame)
+    MainWW.CreateButton(WW_DIM, 0.4, 0.75, "Actualizar", command = lambda: MainList.FilterColumns(), frame = ListMenuFrame, width = 0.4, height = 0.16)
+    MainWW.CreateButton(WW_DIM, 0.2, 0.75, "Sel. todos", command = lambda: MainList.ColVecEdit("all"), frame = ListMenuFrame)
+    MainWW.CreateButton(WW_DIM, 0.2, 0.83, "del. todos", command = lambda: MainList.ColVecEdit("none"), frame = ListMenuFrame)
 
 
     # Menu de filtrado de lista principal
