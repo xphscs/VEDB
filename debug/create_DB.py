@@ -1,8 +1,8 @@
 import pandas as pd
 import random
 
-columnas = ["etiqueta", "tipo", "nombre", "índice", "material", "piedra principal", 
-            "piedra secundaria", "kilates P1", "kilates P2", "costo", "precio", 
+columnas = ["etiqueta", "tipo", "nombre", "índice", "material", "piedra prin", 
+            "piedra sec", "kilates P1", "kilates P2", "costo", "precio", 
             "estado", "vendido a", "vendido por", "vendido el",  "ganancia"]
 
 data = pd.DataFrame(columns = columnas)
@@ -86,13 +86,14 @@ for i in range(150):
 
     
     data_dic = {"etiqueta": etiqueta, "tipo": tipo, "nombre": nombre, "índice": indice, "material": material,
-            "piedra principal": piedra_prin, "piedra secundaria": piedra_sec, "kilates P1": kilate_prin,
+            "piedra prin": piedra_prin, "piedra sec": piedra_sec, "kilates P1": kilate_prin,
             "kilates P2": kilate_sec, "costo": costo, "precio": precio, "estado": estado, "vendido a": v_precio, 
             "vendido por": v_vendedor, "vendido el": v_fecha,  "ganancia": ganancia}
 
     data = data.append(data_dic, ignore_index = True)
 
-data.to_csv("VEDB.csv")
+
+data.to_csv("VEDB.csv", index = False )
     
 
 
