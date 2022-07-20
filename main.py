@@ -38,11 +38,13 @@ DATA_SHOW = DATA.copy()     # DB que se mostrará en la lista principal
 
 def main():
 
-    TKu.TKg.create_main_menu(MainWW)
-
     # Creación de la ventana raíz
     MainWW = TKu.Window(GUI_TITLE, WIDTH, HEIGHT, GUI_BK)
 
+    # Crear el menú de la ventana principal
+    TKg.create_main_menu(MainWW)
+
+    # Creaceión de variables necesarias para el filtro de las listas
     ShowVector = list()     # Vector que detecta cuáles columnas mostrar
 
     columns, items = DBu.df_to_data(DATA)
@@ -52,7 +54,7 @@ def main():
         
     # Creación principal de lista
 
-    MainList = MainWW.CreateList(WW_DIM, 0, 0.5, 0.75, 0.5, columns, items)
+    MainList = MainWW.CreateList(DATA, 0.0, 0.5, 0.75, 0.5)
 
 
     # -- # MENÜ PRINCIPAL DE LA LISTA # -- #
@@ -68,7 +70,7 @@ def main():
         MainWW.CreateCheckbutton(WW_DIM, (0.33  * ( i % 3 ) ), (0.08 * (i // 3)) + 0.2, ShowVector[i], colum, frame = ListMenuFrame)
     
 
-    MainWW.CreateButton(WW_DIM, 0.45, 0.85, "Actualizar", command = lambda: TKg.ShowColumns(DATA, DATA_SHOW, ShowVector), frame = ListMenuFrame)
+    MainWW.CreateButton(WW_DIM, 0.45, 0.85, "Actualizar", command = lambda: TKg.ShowColumns(MainList, DATA, DATA_SHOW, ShowVector), frame = ListMenuFrame)
 
 
     # Menu de filtrado de lista principal
