@@ -15,8 +15,8 @@ def CreateData(path):
 # función que convierte un DataFrame a un objeto numpy para poder manejarlo como listas
 def df_to_data(data):
 
-    columns = data.columns.to_numpy()[1::]
-    values = data.to_numpy()[::][1::]
+    columns = data.columns.to_numpy()[::]
+    values = data.to_numpy()[::][::]
 
     return columns, values
 
