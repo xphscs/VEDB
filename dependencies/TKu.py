@@ -13,6 +13,12 @@ import dependencies.TKgeneral as TKg
 
 GBD = 2
 
+class TKList:
+
+    # Función de inicialiación
+    def __init_(self, root):
+        return
+
 class Window:
 
     # función de inicialización

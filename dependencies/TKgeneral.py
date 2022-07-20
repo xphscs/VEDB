@@ -1,5 +1,7 @@
 import __main__ as main
 
+from main import DATA_SHOW, ShowVector
+
 def SaveDB():
 
     print("SAVING DATA...")
@@ -23,7 +25,17 @@ def create_main_menu(window):
     pichingo_sub = window.CreateSubmenu(MMenu, pichingo_items, pichingo_commands)
 
 
-
     window.MenuIntegrator(MMenu, SMitems, [archivo_sub, pichingo_sub])
 
- 
+
+Q# Función para re-renderizar 
+
+# Función que filtra por columnas la lista
+def ShowColumns(DATA, DATASHOW, SHOWVECTOR):
+
+    DATASHOW = DATA.copy()
+
+    for i, value in enumerate(SHOWVECTOR):
+
+        if value:
+            DATASHOW.drop(DATASHOW.columns[[i]], axis = "columns")
