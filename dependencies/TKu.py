@@ -3,7 +3,6 @@
 # --------------------------------------- #
 
 from cgitb import text
-from logging import raiseExceptions
 from tkinter import *
 from tkinter.ttk import Treeview, Combobox
 
@@ -14,33 +13,49 @@ import dependencies.SQLu as DBu
 
 GBD = 2
 
-
-# Clase que guarda una lista de TK y hace operaciones con ella
 class TKList:
+    """
+    Clase cuyo atributo principal es un objeto TreeView de TKinter, 
+    con funciones adicionales para que esta instancia "self.wwlist" 
+    se comporte como lo esperado en la aplicación
+    """
 
     # Función de inicialiación, sólo crea las variables locales, no renderiza la lista
     def __init__(self, root, data, posargs, dimargs):
+        """
+        Función que inicializa la clase. Esta función SÓLO GUARDA LOS DATOS DE LA LISTA
+        Y VARIABES NECESARIAS PARA SU CORRECTO FUNCIONAMIENTO. Finalmente llama al método
+        CreateList, que se encarga de crear la lista en base a los atributos.
+        """
         
         self.data_backup = data     # backup de la data en caso que no se quieran guardar cambios
         self.data = data.copy()     # data a utilizat y modificar
 
-        self.root = root
-        self.frame = Frame(self.root)
+        self.root = root    # Objeto Tk padre del frame 
+        self.frame = Frame(self.root)   # Frame en donde se renderiza la lista
         self.frame.place(relwidth = dimargs[0], relheight = dimargs[1], relx = posargs[0], rely = posargs[1])
 
+        # Vector que guarda valores booleanos acerca de las columnas que tienen que ser mostradas
         self.columnvector = [BooleanVar(value = True) for x in data.columns]
 
+        # Ya al haber amacenado toda la información necesario de la lista, se llama a la función
+        # CreateList para que esta cree la lista en la ventana padre
         self.wwlist = self.CreateList()
 
 
-    # Función que crea la lista para mostrar en la GUI
     def CreateList(self):
+        """
+        Función que crea la lista en la ventana padre. La lista como tal es un objeto
+        tk.Treeview el cual es modificado para parecer una lista tabular. 
+        """
 
-        columns, items = DBu.df_to_data(self.data)
+        columns, items = DBu.df_to_data(self.data)  # Con la data guardada, se convierte ésta a tipos leíbles por tk.Treeview
+                                                    # para luego ser utilizados
 
+        # Se crea el objeto Treeview
         TV = Treeview(self.frame, columns = [f"#{i}" for i in range(columns.size)], show = "headings")
 
-        # TV.heading("#1", text = columns[0])
+        # Se añaden las columnas con su respectivo nombre
         for (i, item) in enumerate([columns[0]] + columns.tolist()):
             
             TV.heading(f"#{i}", text = item)
@@ -56,12 +71,10 @@ class TKList:
                 "",
                 END,
                 iid = None,
-                # text = item[0],
                 values = item,
             )
         
-        # TV.column("#0", stretch = NO, anchor = CENTER)
-
+        # Se agregan las dos scrollbars, tanto vertical como horizontal
         SBy = Scrollbar(self.frame, orient = "vertical", command = TV.yview)
         SBx = Scrollbar(self.frame, orient = "horizontal")
         SBx.configure(command = TV.xview)
@@ -74,24 +87,29 @@ class TKList:
 
         TV.pack(side = LEFT, fill = BOTH)
 
-        return TV
+        
+        return TV   # Se retorna el objeto Treeview en caso que se necesite su instancia después
 
-    # función para ocultar columnas 
+
     def FilterColumns(self):
-
-        self.show_data = self.data.copy()
+        """
+        Función que filtra las columnas a mostrar en la lista de acuerdo al columvector de la lista.
+        Lo único que hace es cambiar el ancho de cada columna inactiva
+        """
 
         for i, val in enumerate(self.columnvector):
 
             if not val.get():
                 self.wwlist.column(f"#{i + 1}", width = 0)
-                #self.show_data.drop(self.show_data.columns[[i]], axis = "columns")
             else:
                 self.wwlist.column(f"#{i + 1}", width = 150)
 
-        self.CreateList()
 
     def ColVecEdit(self, option):
+        """
+        Función llamada por los botones de menú "MOSTRAR COLUMNAS". Esta función selecciona o deselecciona
+        todos los elementos del columvector.
+        """
 
         if option == "all":
 
@@ -104,14 +122,14 @@ class TKList:
             for val in self.columnvector:
 
                 val.set(False)
-        
-        
 
-
-
-    
 
 class Window:
+    """
+    Clase de ventana. En esta se encuentran los atributos básicos de la ventana Tkinter
+    pero se le añaden métodos para facilitar la creación de widgets necesarios en la
+    para la ventana. 
+    """
 
     # función de inicialización
     def __init__(self, title, p_width, p_height, bgc):

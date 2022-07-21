@@ -1,3 +1,9 @@
+"""
+Script que se utiliza para hacer debug. Crea una base de datos falsa para que se pueda
+jugar con ella en el proceso de debugación de la aplicación
+"""
+
+
 import pandas as pd
 import random
 

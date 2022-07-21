@@ -1,6 +1,9 @@
 import __main__ as main
 
 def SaveDB():
+    """
+    Función que guarda la base de datos modificada.
+    """
 
     print("SAVING DATA...")
     main.DATA.to_csv("VEDB.csv", index = False)
@@ -9,6 +12,9 @@ def SaveDB():
 
 # función para crear el manú de la ventana principal
 def create_main_menu(window):
+    """
+    Función que crea el menú (barra menú) de la ventana principal.
+    """
 
     MMenu = window.CreateMenu()
 
@@ -26,16 +32,3 @@ def create_main_menu(window):
     window.MenuIntegrator(MMenu, SMitems, [archivo_sub, pichingo_sub])
 
 
-# Función para re-renderizar 
-
-# Función que filtra por columnas la lista
-def ShowColumns(list,  DATA, DATASHOW, SHOWVECTOR):
-
-    DATASHOW = DATA.copy()
-
-    for i, value in enumerate(SHOWVECTOR):
-
-        if value:
-            DATASHOW.drop(DATASHOW.columns[[i]], axis = "columns")
-
-    print("LISTA ACTUALIZADA")
