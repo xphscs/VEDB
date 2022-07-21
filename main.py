@@ -30,8 +30,8 @@ DATA_BACKUP = DATA.copy()   # BackUp de la DB en caso que no se quieran guardar 
 DATA_SHOW = DATA.copy()     # DB que se mostrará en la lista principal
 
 
-BasicFilterPreferences = ["tipo", "material", "vendido por"]    # Lista en donde se almacenan los nombres de las columnas que se muestran en el menú de 
-                                                                # filtrado básico
+BasicFilterPreferences = ["tipo", "material", "vendido por"]    # Lista en donde se almacenan los nombres de las 
+                                                                # columnas que se muestran en el menú de filtrado básico
 
 # ------------------------------- #
 # - # FUNCIÓN MAIN DEL CÓDIGO # - #
@@ -77,7 +77,10 @@ def main():
 
     LFMenuFrame = MainWW.CreateFrame(0.75, 0.4, 0.25, 0.4)
 
-    MainWW.CreateLabel(WW_DIM, 0.35, 0.0, "FILTRADO BÄSICO", LFMenuFrame)
+    MainWW.CreateLabel(WW_DIM, 0.35, 0.0, "FILTRADO BÁSICO", LFMenuFrame)
+
+    
+
     
 
 

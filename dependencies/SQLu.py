@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+from tkinter import BooleanVar
+
 
 # ------------------------------------------------------------- #
 # - # SCRIPT EN DONDE SE ALMACENAN LAS INSTRUCCIONES DE SQL # - #
@@ -27,6 +29,31 @@ def df_to_data(data):
     values = data.to_numpy()[::][::]
 
     return columns, values
+
+def GetColumnValues(data, column):
+    """
+    Función que devuelve todos los posibles valores de la columna 
+    pasada como argumento
+    """
+
+    CValues = set()
+
+    for i in data.index:
+        CValues.add(data[column][i])
+
+    return CValues
+
+
+def CreateFilterDic(data):
+    """
+    Función que crea e diccionario de filtro, cuyas keys son los nombres de cada columna
+    """
+    FilterDic = dict()
+
+    for column in data.columns:
+
+        values = GetColumnValues(data, column):
+
 
 
 
